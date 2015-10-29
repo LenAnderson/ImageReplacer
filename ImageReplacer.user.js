@@ -37,7 +37,7 @@ Array.prototype.forEach.call(document.querySelectorAll('img'), function(img) {
 function replace(img) {
     img.setAttribute('data-image-replacer', '//www.illmurray.com/g/');
     img.setAttribute('data-image-replacer-original', img.src);
-    img.src = location.protocol + '//www.fillmurray.com/g/' + img.offsetWidth + '/' + img.offsetHeight;
+    img.src = location.protocol + '//www.fillmurray.com/g/' + (img.width || img.offsetWidth) + '/' + (img.height || img.offsetHeight);
 }
 function unreplace(img) {
     img.src = img.getAttribute('data-image-replacer-original');
