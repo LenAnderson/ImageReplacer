@@ -2,7 +2,7 @@
 // @name         Image Replacer
 // @namespace    https://github.com/LenAnderson/
 // @downloadURL  https://github.com/LenAnderson/ImageReplacer/raw/master/ImageReplacer.user.js
-// @version      1.1
+// @version      1.2
 // @description  Replace selected images with other images.
 // @author       LenAnderson
 // @match        *://*/*
@@ -51,7 +51,6 @@ function unreplace(img) {
 var mo = new MutationObserver(function(muts) {
     muts.forEach(function(mut) {
         Array.prototype.forEach.call(mut.addedNodes, function(node) {
-            console.info('added node', node, node instanceof HTMLElement, node.tagName);
             if (node instanceof HTMLElement) {
                 if (node.tagName == 'IMG') {
                     node.addEventListener('contextmenu', listener);
