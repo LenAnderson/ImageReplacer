@@ -2,12 +2,13 @@
 // @name         Image Replacer
 // @namespace    https://github.com/LenAnderson/
 // @downloadURL  https://github.com/LenAnderson/ImageReplacer/raw/master/ImageReplacer.user.js
-// @version      1.2
+// @version      1.3
 // @description  Replace selected images with other images.
 // @author       LenAnderson
 // @match        *://*/*
 // @grant        GM_setValue
 // @grant        GM_getValue
+// @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
 var subs = JSON.parse(GM_getValue('image-replacer') || '[]');
@@ -37,7 +38,17 @@ function listener(evt) {
 }
 
 function replace(img) {
-    img.setAttribute('data-image-replacer', '//www.illmurray.com/g/');
+    img.addEventListener('error', function() {
+        GM_xmlhttpRequest({method:'GET', url:img.src, responseType: 'blob', onload: function(resp) {
+            var blob = new Blob([resp.response], {type: 'image/jpeg'});
+            var reader = new FileReader();
+            reader.addEventListener('loadend', function() {
+                img.src = reader.result;
+            });
+            reader.readAsDataURL(blob);
+        }});
+    });
+    img.setAttribute('data-image-replacer', '//www.fillmurray.com/g/');
     img.setAttribute('data-image-replacer-original', img.src);
     img.src = location.protocol + '//www.fillmurray.com/g/' + (img.width || img.offsetWidth) + '/' + (img.height || img.offsetHeight);
 }
